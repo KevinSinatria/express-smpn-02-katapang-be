@@ -1,0 +1,142 @@
+generator client {
+   provider = "prisma-client-js"
+}
+
+datasource db {
+   provider = "mysql"
+   url      = env("DATABASE_URL")
+}
+
+model Personil {
+   id            Int            @id @default(autoincrement()) @db.UnsignedInt
+   name          String         @db.VarChar(255)
+   image_url     String         @db.Text
+   active        Boolean        @default(true)
+   created_at    DateTime       @default(now()) @db.Timestamp(0)
+   updated_at    DateTime       @default(now()) @updatedAt @db.Timestamp(0)
+   personil_role PersonilRole[]
+   headmaster    Headmaster?
+   article       Article[]
+   user          User?
+}
+
+model Role {
+   id            Int            @id @default(autoincrement()) @db.UnsignedInt
+   role          String         @db.VarChar(255)
+   created_at    DateTime       @default(now()) @db.Timestamp(0)
+   updated_at    DateTime       @default(now()) @updatedAt @db.Timestamp(0)
+   personil_role PersonilRole[]
+}
+
+model PersonilRole {
+   id             Int      @id @default(autoincrement())
+   personil_id    Int      @db.UnsignedInt
+   role_id        Int      @db.UnsignedInt
+   mapel          String?  @db.VarChar(255)
+   jabatan_detail String?  @db.VarChar(255)
+   created_at     DateTime @default(now()) @db.Timestamp(0)
+   updated_at     DateTime @default(now()) @updatedAt @db.Timestamp(0)
+   personil       Personil @relation(fields: [personil_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "personil_role_ibfk_1")
+   role           Role     @relation(fields: [role_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "personil_role_ibfk_2")
+
+   @@index([personil_id], map: "personil_role_ibfk_1")
+   @@index([role_id], map: "personil_role_ibfk_2")
+}
+
+model Headmaster {
+   id          Int      @id @default(autoincrement())
+   personil_id Int      @unique @db.UnsignedInt
+   sambutan    String   @db.Text
+   periode     String   @db.VarChar(255)
+   created_at  DateTime @default(now()) @db.Timestamp(0)
+   updated_at  DateTime @default(now()) @updatedAt @db.Timestamp(0)
+   personil    Personil @relation(fields: [personil_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "headmaster_ibfk_1")
+
+   @@index([personil_id], map: "headmaster_ibfk_1")
+}
+
+model GaleriAlbum {
+   id         Int            @id @default(autoincrement()) @db.UnsignedInt
+   name       String         @db.VarChar(255)
+   created_at DateTime       @default(now()) @db.Timestamp(0)
+   updated_at DateTime       @default(now()) @updatedAt @db.Timestamp(0)
+   photos     GaleriPhotos[]
+}
+
+model GaleriPhotos {
+   id           Int         @id @default(autoincrement())
+   album_id     Int         @db.UnsignedInt
+   photo_url    String      @db.Text
+   created_at   DateTime    @default(now()) @db.Timestamp(0)
+   updated_at   DateTime    @default(now()) @updatedAt @db.Timestamp(0)
+   galeri_album GaleriAlbum @relation(fields: [album_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "galeri_photos_ibfk_1")
+
+   @@index([album_id], map: "galeri_photos_ibfk_1")
+}
+
+model Article {
+   id            Int       @id @default(autoincrement())
+   title         String    @db.VarChar(255)
+   slug          String    @unique @db.VarChar(255)
+   content       String    @db.Text
+   thumbnail_url String?   @db.Text
+   category_id   Int       @db.UnsignedInt
+   author_id     Int       @db.UnsignedInt
+   published     Boolean   @default(false)
+   published_at  DateTime? @default(now()) @db.Timestamp(0)
+   created_at    DateTime  @default(now()) @db.Timestamp(0)
+   updated_at    DateTime  @default(now()) @updatedAt @db.Timestamp(0)
+
+   author   Personil        @relation(fields: [author_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "article_ibfk_2")
+   category ArticleCategory @relation(fields: [category_id], references: [id], onUpdate: Cascade, map: "article_ibfk_1")
+
+   @@index([author_id], map: "author_id")
+   @@index([category_id], map: "category_id")
+}
+
+model ArticleCategory {
+   id         Int       @id @default(autoincrement()) @db.UnsignedInt
+   category   String    @unique @db.VarChar(255)
+   created_at DateTime  @default(now()) @db.Timestamp(0)
+   updated_at DateTime  @default(now()) @updatedAt @db.Timestamp(0)
+   articles   Article[]
+}
+
+model User {
+   id          Int      @id @default(autoincrement())
+   username    String   @unique @db.VarChar(255)
+   password    String   @db.VarChar(255)
+   personil_id Int      @unique @db.UnsignedInt
+   created_at  DateTime @default(now()) @db.Timestamp(0)
+   updated_at  DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+   personil Personil @relation(fields: [personil_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "user_ibfk_1")
+}
+
+model SchoolStat {
+   id         Int      @id @default(autoincrement()) @db.UnsignedInt
+   year       Int      @db.UnsignedInt
+   students   Int      @db.UnsignedInt
+   classes    Int      @db.UnsignedInt
+   teachers   Int      @db.UnsignedInt
+   created_at DateTime @default(now()) @db.Timestamp(0)
+   updated_at DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model SchoolProfile {
+   id         Int      @id @default(autoincrement()) @db.UnsignedInt
+   visi       String   @db.Text
+   misi       String   @db.Text
+   created_at DateTime @default(now()) @db.Timestamp(0)
+   updated_at DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model SchoolContact {
+   id         Int      @id @default(autoincrement()) @db.UnsignedInt
+   instagram  String?  @db.VarChar(255)
+   address    String   @db.Text
+   email      String   @db.VarChar(255)
+   phone      String   @db.VarChar(50)
+   created_at DateTime @default(now()) @db.Timestamp(0)
+   updated_at DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}

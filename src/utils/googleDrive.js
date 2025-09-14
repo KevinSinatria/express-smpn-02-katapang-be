@@ -2,13 +2,6 @@ import { google } from "googleapis";
 import dotenv from "dotenv";
 import fs from "fs";
 
-dotenv.config();
-
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
-const GOOGLE_REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
-
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
@@ -41,6 +34,13 @@ const GOOGLE_REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
 //   credentials,
 //   scopes: ["https://www.googleapis.com/auth/drive"],
 // });
+
+dotenv.config();
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
+const GOOGLE_REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
 
 const oAuth2Client = new google.auth.OAuth2(
 	GOOGLE_CLIENT_ID,
@@ -87,6 +87,8 @@ export const uploadFileToGoogleDrive = async (file, fileName, folderId) => {
 			media: media,
 			fields: "id, name",
 		});
+
+		console.log(response.data);
 
 		try {
 			await fs.promises.unlink(file.path);

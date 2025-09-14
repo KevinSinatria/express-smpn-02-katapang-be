@@ -14,21 +14,21 @@ model Personnel {
    active         Boolean         @default(true)
    created_at     DateTime        @default(now()) @db.Timestamp(0)
    updated_at     DateTime        @default(now()) @updatedAt @db.Timestamp(0)
-   personnel_role PersonnelRole[]
-   headmaster     Headmaster?
-   article        Article[]
-   user           User?
+   personnel_role PersonnelRoles[]
+   headmaster     Headmasters?
+   articles        Articles[]
+   users           Users?
 }
 
-model Role {
+model Roles {
    id             Int             @id @default(autoincrement()) @db.UnsignedInt
-   role           String          @db.VarChar(255)
+   name           String          @db.VarChar(255)
    created_at     DateTime        @default(now()) @db.Timestamp(0)
    updated_at     DateTime        @default(now()) @updatedAt @db.Timestamp(0)
-   personnel_role PersonnelRole[]
+   personnel_role PersonnelRoles[]
 }
 
-model PersonnelRole {
+model PersonnelRoles {
    id           Int       @id @default(autoincrement())
    personnel_id Int       @db.UnsignedInt
    role_id      Int       @db.UnsignedInt
@@ -37,13 +37,13 @@ model PersonnelRole {
    created_at   DateTime  @default(now()) @db.Timestamp(0)
    updated_at   DateTime  @default(now()) @updatedAt @db.Timestamp(0)
    personnel    Personnel @relation(fields: [personnel_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "personnel_role_ibfk_1")
-   role         Role      @relation(fields: [role_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "personnel_role_ibfk_2")
+   role         Roles      @relation(fields: [role_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "personnel_role_ibfk_2")
 
    @@index([personnel_id], map: "personnel_role_ibfk_1")
    @@index([role_id], map: "personnel_role_ibfk_2")
 }
 
-model Headmaster {
+model Headmasters {
    id                 Int       @id @default(autoincrement())
    personil_id        Int        @unique @db.UnsignedInt
    welcoming_sentence String    @db.Text
@@ -55,7 +55,7 @@ model Headmaster {
    @@index([personil_id], map: "headmaster_ibfk_1")
 }
 
-model GaleriAlbum {
+model GaleriAlbums {
    id         Int            @id @default(autoincrement()) @db.UnsignedInt
    name       String         @db.VarChar(255)
    created_at DateTime       @default(now()) @db.Timestamp(0)
@@ -69,12 +69,12 @@ model GaleriPhotos {
    photo_url    String      @db.Text
    created_at   DateTime    @default(now()) @db.Timestamp(0)
    updated_at   DateTime    @default(now()) @updatedAt @db.Timestamp(0)
-   galeri_album GaleriAlbum @relation(fields: [album_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "galeri_photos_ibfk_1")
+   galeri_album GaleriAlbums @relation(fields: [album_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "galeri_photos_ibfk_1")
 
    @@index([album_id], map: "galeri_photos_ibfk_1")
 }
 
-model Article {
+model Articles {
    id            Int       @id @default(autoincrement())
    title         String    @db.VarChar(255)
    slug          String    @unique @db.VarChar(255)
@@ -88,21 +88,21 @@ model Article {
    updated_at    DateTime  @default(now()) @updatedAt @db.Timestamp(0)
 
    author   Personnel       @relation(fields: [author_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "article_ibfk_2")
-   category ArticleCategory @relation(fields: [category_id], references: [id], onUpdate: Cascade, map: "article_ibfk_1")
+   category ArticleCategories @relation(fields: [category_id], references: [id], onUpdate: Cascade, map: "article_ibfk_1")
 
    @@index([author_id], map: "author_id")
    @@index([category_id], map: "category_id")
 }
 
-model ArticleCategory {
+model ArticleCategories {
    id         Int       @id @default(autoincrement()) @db.UnsignedInt
    category   String    @unique @db.VarChar(255)
    created_at DateTime  @default(now()) @db.Timestamp(0)
    updated_at DateTime  @default(now()) @updatedAt @db.Timestamp(0)
-   articles   Article[]
+   articles   Articles[]
 }
 
-model User {
+model Users {
    id          Int      @id @default(autoincrement())
    username    String   @unique @db.VarChar(255)
    password    String   @db.VarChar(255)
@@ -110,7 +110,7 @@ model User {
    created_at  DateTime @default(now()) @db.Timestamp(0)
    updated_at  DateTime @default(now()) @updatedAt @db.Timestamp(0)
 
-   personil Personnel @relation(fields: [personil_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "user_ibfk_1")
+   personnel Personnel @relation(fields: [personil_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "user_ibfk_1")
 }
 
 model SchoolStat {

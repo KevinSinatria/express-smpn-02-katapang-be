@@ -17,7 +17,7 @@ export const createPersonnel = async (dataBody, file) => {
 		const uniqueFileName = `personnel-${Date.now()}-${Math.round(
 			Math.random() * 1e9
 		)}`;
-		const uploadedFile = uploadFileToGoogleDrive(
+		const uploadedFile = await uploadFileToGoogleDrive(
 			file,
 			uniqueFileName,
 			personnelFolderId

@@ -2,6 +2,7 @@ import express from "express";
 import PersonnelRoutes from "./personnel/route.js";
 import RolesRoutes from "./roles/route.js";
 import HeadmastersRoutes from "./headmasters/route.js";
+import PersonnelRolesRoutes from "./personnelRoles/route.js";
 import { google } from "googleapis";
 
 const router = express.Router();
@@ -9,6 +10,7 @@ const router = express.Router();
 router.use("/personnel", PersonnelRoutes);
 router.use("/roles", RolesRoutes);
 router.use("/headmasters", HeadmastersRoutes);
+router.use("/personnel-roles", PersonnelRolesRoutes);
 
 // Google OAuth2 setup
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;

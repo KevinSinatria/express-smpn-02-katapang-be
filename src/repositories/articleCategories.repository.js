@@ -2,8 +2,8 @@ import prisma from "../config/prisma.js";
 import { paginate } from "../utils/paginate.js";
 
 export const findAll = async (req) => {
-	const galleryAlbums = await paginate(
-		prisma.galleryAlbums,
+	const articleCategories = await paginate(
+		prisma.articleCategories,
 		req,
 		{},
 		{},
@@ -15,61 +15,63 @@ export const findAll = async (req) => {
 		},
 		10
 	);
-
-	return galleryAlbums;
+	return articleCategories;
 };
 
 export const findById = async (id) => {
-	const galleryAlbum = await prisma.galleryAlbums.findUnique({
-		where: {
-			id: Number(id),
-		},
+	const articleCategory = await prisma.articleCategories.findUnique({
+		where: { id: Number(id) },
 		select: {
 			id: true,
 			name: true,
 			created_at: true,
 			updated_at: true,
-			photos: {
+			articles: {
 				select: {
-					photo_url: true,
+					id: true,
+					title: true,
+					thumbnail_url: true,
+					created_at: true,
+					updated_at: true,
 				},
 			},
 		},
 	});
 
-	if (!galleryAlbum) {
-		const error = new Error("Gallery Album not found");
+	if (!articleCategory) {
+		const error = new Error("Article Category not found");
 		error.code = "P2025";
 		throw error;
 	}
 
-	return galleryAlbum;
+	return articleCategory;
 };
 
 export const create = async (data) => {
-	const newGalleryAlbum = await prisma.galleryAlbums.create({
+	const articleCategory = await prisma.articleCategories.create({
 		data: {
 			name: data.name,
 		},
 	});
-	return newGalleryAlbum;
+
+	return articleCategory;
 };
 
 export const updateById = async (id, data) => {
-	const galleryAlbum = await prisma.galleryAlbums.findUnique({
+	const articleCategory = await prisma.articleCategories.findUnique({
 		where: { id: Number(id) },
 		select: {
 			id: true,
 		},
 	});
 
-	if (!galleryAlbum) {
-		const error = new Error("Gallery Album not found");
+	if (!articleCategory) {
+		const error = new Error("Article Category not found");
 		error.code = "P2025";
 		throw error;
 	}
 
-	return await prisma.galleryAlbums.update({
+	return await prisma.articleCategories.update({
 		where: { id: Number(id) },
 		data: {
 			name: data.name,
@@ -78,26 +80,20 @@ export const updateById = async (id, data) => {
 };
 
 export const deleteById = async (id) => {
-	const galleryAlbum = await prisma.galleryAlbums.findUnique({
+	const articleCategory = await prisma.articleCategories.findUnique({
 		where: { id: Number(id) },
 		select: {
 			id: true,
 		},
 	});
 
-	await prisma.galleryPhotos.deleteMany({
-		where: {
-			gallery_album_id: Number(id),
-		},
-	});
-
-	if (!galleryAlbum) {
-		const error = new Error("Gallery Album not found");
+	if (!articleCategory) {
+		const error = new Error("Article Category not found");
 		error.code = "P2025";
 		throw error;
 	}
 
-	return await prisma.galleryAlbums.delete({
+	return await prisma.articleCategories.delete({
 		where: { id: Number(id) },
 	});
 };

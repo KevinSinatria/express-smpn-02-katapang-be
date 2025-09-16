@@ -88,8 +88,6 @@ export const uploadFileToGoogleDrive = async (file, fileName, folderId) => {
 			fields: "id, name",
 		});
 
-		console.log(response.data);
-
 		try {
 			await fs.promises.unlink(file.path);
 		} catch (err) {

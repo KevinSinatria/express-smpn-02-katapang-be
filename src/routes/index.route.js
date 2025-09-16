@@ -4,6 +4,7 @@ import RolesRoutes from "./roles/route.js";
 import HeadmastersRoutes from "./headmasters/route.js";
 import PersonnelRolesRoutes from "./personnelRoles/route.js";
 import GalleryAlbumsRoutes from "./galleryAlbums/route.js";
+import ArticleCategoriesRoutes from "./articleCategories/route.js";
 import { google } from "googleapis";
 
 const router = express.Router();
@@ -13,6 +14,7 @@ router.use("/roles", RolesRoutes);
 router.use("/headmasters", HeadmastersRoutes);
 router.use("/personnel-roles", PersonnelRolesRoutes);
 router.use("/gallery-albums", GalleryAlbumsRoutes);
+router.use("/article-categories", ArticleCategoriesRoutes);
 
 // Google OAuth2 setup
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;

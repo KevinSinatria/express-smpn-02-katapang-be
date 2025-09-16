@@ -14,6 +14,7 @@ export const getHeadmasterById = async (id) => {
 		return await HeadmastersRepository.findById(id);
 	} catch (error) {
 		console.log(error);
+
 		throw error;
 	}
 };

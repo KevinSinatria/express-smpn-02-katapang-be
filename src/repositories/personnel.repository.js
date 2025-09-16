@@ -13,7 +13,7 @@ export const findAll = async () => {
 					position: true,
 					role: {
 						select: {
-							role: true,
+							name: true,
 						},
 					},
 				},

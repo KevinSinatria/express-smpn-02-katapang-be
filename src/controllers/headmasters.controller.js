@@ -23,6 +23,9 @@ export const getHeadmasterById = async (req, res) => {
 		res.status(200).json({ success: true, data: headmaster });
 	} catch (error) {
 		console.log(error);
+      if(error.code== "P2025"){
+         return res.status(404).json({ success: false, message: "Headmaster not found" });
+      }
 		res.status(500).json({ success: false, message: "Internal server error" });
 	}
 };

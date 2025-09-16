@@ -55,23 +55,23 @@ model Headmasters {
    @@index([personnel_id], map: "headmaster_ibfk_1")
 }
 
-model GaleriAlbums {
-   id         Int            @id @default(autoincrement()) @db.UnsignedInt
-   name       String         @db.VarChar(255)
-   created_at DateTime       @default(now()) @db.Timestamp(0)
-   updated_at DateTime       @default(now()) @updatedAt @db.Timestamp(0)
-   photos     GaleriPhotos[]
+model GalleryAlbums {
+   id         Int             @id @default(autoincrement()) @db.UnsignedInt
+   name       String          @db.VarChar(255)
+   created_at DateTime        @default(now()) @db.Timestamp(0)
+   updated_at DateTime        @default(now()) @updatedAt @db.Timestamp(0)
+   photos     GalleryPhotos[]
 }
 
-model GaleriPhotos {
-   id           Int          @id @default(autoincrement())
-   album_id     Int          @db.UnsignedInt
-   photo_url    String       @db.Text
-   created_at   DateTime     @default(now()) @db.Timestamp(0)
-   updated_at   DateTime     @default(now()) @updatedAt @db.Timestamp(0)
-   galeri_album GaleriAlbums @relation(fields: [album_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "galeri_photos_ibfk_1")
+model GalleryPhotos {
+   id            Int           @id @default(autoincrement())
+   album_id      Int           @db.UnsignedInt
+   photo_url     String        @db.Text
+   created_at    DateTime      @default(now()) @db.Timestamp(0)
+   updated_at    DateTime      @default(now()) @updatedAt @db.Timestamp(0)
+   gallery_album GalleryAlbums @relation(fields: [album_id], references: [id], onUpdate: Cascade, onDelete: Cascade, map: "gallery_photos_ibfk_1")
 
-   @@index([album_id], map: "galeri_photos_ibfk_1")
+   @@index([album_id], map: "gallery_photos_ibfk_1")
 }
 
 model Articles {

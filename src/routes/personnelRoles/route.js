@@ -7,4 +7,4 @@ router.post("/", PersonnelRolesController.createPersonnelRole);
 router.put("/:id", PersonnelRolesController.updatePersonnelRoleById);
 router.delete("/:id", PersonnelRolesController.deletePersonnelRoleById);
 
-export default router;  
+export default router;

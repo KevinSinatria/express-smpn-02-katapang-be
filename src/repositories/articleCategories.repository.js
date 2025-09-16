@@ -30,7 +30,7 @@ export const findById = async (id) => {
 				select: {
 					id: true,
 					title: true,
-					image_url: true,
+					thumbnail_url: true,
 					created_at: true,
 					updated_at: true,
 				},

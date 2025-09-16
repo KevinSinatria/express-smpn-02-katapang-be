@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const personnelStorage = multer.diskStorage({
+const singleStorage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		cb(null, path.join(__dirname, "../uploads/personnel"));
 	},
@@ -15,7 +15,7 @@ const personnelStorage = multer.diskStorage({
 	},
 });
 
-const articleStorage = multer.diskStorage({
+const lotOfStorage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		cb(null, path.join(__dirname, "../uploads/articles"));
 	},
@@ -25,11 +25,11 @@ const articleStorage = multer.diskStorage({
 	},
 });
 
-export const uploadPersonnelImage = multer({
-	storage: personnelStorage,
+export const uploadSingleImage = multer({
+	storage: singleStorage,
 }).single("image");
 
-export const uploadArticleImage = multer({ storage: articleStorage }).array(
+export const uploadLotOfImages = multer({ storage: lotOfStorage }).array(
 	"images",
 	10
 );
